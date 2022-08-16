@@ -1,9 +1,13 @@
 import curses
 from random import randint
 
+WINDOW_WIDTH = 60
+WINDOW_HEIGHT = 20
+
 # Setup Window
 curses.initscr()
-win = curses.newwin(20, 60, 0, 0)  # y, x, and starting point
+win = curses.newwin(WINDOW_HEIGHT, WINDOW_WIDTH, 0,
+                    0)  # y, x, and starting point
 win.keypad(1)
 curses.noecho()
 curses.curs_set(0)
@@ -11,10 +15,11 @@ win.border(0)
 win.nodelay(1)
 
 # snake and food
-snake = [(4, 10), (4, 9), (4, 8)]
-food = (10, 20)
+snake = [(4, 4), (4, 3), (4, 2)]
+food = (6, 6)
 
 win.addch(food[0], food[1], '#')
+
 # Game Logic
 score = 0
 
@@ -50,11 +55,11 @@ while key != ESC:
         # check if we hit the border
         if y == 0:
             break
-        if y == 19:
+        if y == WINDOW_HEIGHT - 1:
             break
         if x == 0:
             break
-        if x == 59:
+        if x == WINDOW_WIDTH - 1:
             break
 
         # check if snake runs over itself
@@ -66,7 +71,8 @@ while key != ESC:
             score += 1
             food = ()
             while food == ():
-                food = (randint(1, 18), randint(1, 58))
+                food = (randint(1, WINDOW_HEIGHT - 2),
+                        randint(1, WINDOW_WIDTH - 2))
                 if food in snake:
                     food = ()
             win.addch(food[0], food[1], '#')
